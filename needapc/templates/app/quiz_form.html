@@ -1,0 +1,13 @@
+<!-- extend base html -->
+{% extends "app/base.html" %}
+<!-- define content block -->
+{% block content %}
+<!-- genereate the title and render the form -->
+<h1>Quiz</h1>
+<form action="" method="post">
+{{ form.as_p }}
+{% csrf_token %}
+<input type="submit" value="Submit">
+</form>
+<!-- end content block -->
+{% endblock %}
