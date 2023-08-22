@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from app import views
 
 
@@ -24,4 +24,5 @@ urlpatterns = [
     path(('quiz/<slug:slug>/'), views.QuizView.as_view(), name='quiz'),
     path('quiz-response/<slug:quiz_slug>/user/<int:user_id>/', views.QuizResponseView.as_view(), name='quiz_response'),
     path('admin/', admin.site.urls),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]
