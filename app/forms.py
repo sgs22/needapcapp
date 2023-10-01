@@ -6,4 +6,4 @@ class QuizForm(forms.Form):
         questions = kwargs.pop('questions')
         super().__init__(*args, **kwargs)
         for question in questions:
-            self.fields[question.question] = forms.ChoiceField(choices=[(choice.choice, choice.choice) for choice in question.choice_set.all()], widget=forms.RadioSelect)
+            self.fields[question.question] = forms.ChoiceField(choices=[(choice.choice, choice.choice) for choice in question.choice_set.all()], widget=forms.RadioSelect(attrs={'class': 'text-blue-600'}))
