@@ -1,16 +1,29 @@
-
 {% extends "app/base.html" %}
 
 {% block content %}
 <div class="container mx-auto flex justify-center mt-8">
     <div class="flex-col">
         <div class="p-6">
-            <h1 class="text-center">Quiz</h1>
+            <h1 class="text-center text-4xl font-bold">Quiz</h1>
         </div>
-        <form action="" method="post">
-        {{ form.as_p }}
-        {% csrf_token %}
-        <input type="submit" value="Submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <div class="progress-bar-container w-90 h-5 bg-gray-300 rounded-full mt-4 mx-4">
+            <div class="progress-bar-outline h-full rounded-full overflow-hidden">
+                <div class="progress-bar-progress h-full bg-blue-500 rounded-full" style="width: 33%;"></div>
+            </div>
+        </div>
+        <form action="" method="post" class="p-5">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group p-3">
+                    <label for="{{ field.id_for_label }}" class="text-4xl font-bold">{{ field.label }}</label>
+                    <div class="pt-8">
+                        {{ field }}
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="flex justify-center">
+                <input type="submit" value="Submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+            </div>
         </form>
     </div>
 </div>

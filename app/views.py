@@ -1,5 +1,7 @@
 import uuid
-from django.shortcuts import render
+import json
+from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView
 from app.models import Choice, Question, Quiz, QuizResponse
@@ -53,20 +55,32 @@ class QuizView(DetailView):
             user=quiz_response_user,
             response=quiz_response_data
         )
-        context = {'quiz_response': quiz_response_object}
-        return render(request, 'app/quiz_response.html', context)
+        # after post redirect to quiz response
+        url = reverse('quiz_response', kwargs={'quiz_response_id': quiz_response_object.id})
+        return redirect(url)
+        # return render(request, 'app/quiz_response.html', context)
     
 #create class view to present the quiz response
 class QuizResponseView(DetailView):
     model = QuizResponse
     template_name = 'app/quiz_response.html'
 
+
     def get_object(self):
-        quiz_slug = self.kwargs.get('quiz_slug')
-        user_id = self.kwargs.get('user_id')
-        return QuizResponse.objects.get(quiz__slug=quiz_slug, user__id=user_id)
+        quiz_response_id = self.kwargs.get('quiz_response_id')
+        return QuizResponse.objects.get(id=quiz_response_id)
+        # quiz_slug = self.kwargs.get('quiz_slug')
+        # user_id = self.kwargs.get('user_id')
+        # return QuizResponse.objects.get(quiz__slug=quiz_slug, user__id=user_id)
     
+    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        quiz_response = self.get_object().response
+        quiz_response.pop('csrfmiddlewaretoken', None) # remove csrfmiddlewaretoken key
         context['quiz_name'] = self.get_object().quiz.name
+        context['quiz_description'] = self.get_object().quiz.description
+        context['quiz_response'] = quiz_response
+        print(quiz_response)
         return context

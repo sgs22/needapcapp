@@ -1,7 +1,15 @@
-<!-- extend base html and render out the answers the user smade from the quiz form -->
 {% extends "app/base.html" %}
 {% block content %}
-<h1>Quiz Results 2</h1>
-<h2>{{quiz_name}} </h2>
+<div class="flex justify-center items-center h-screen">
+    <div class="card p-8">
+        <h1 class="text-3xl font-bold mb-4">Quiz Results 2</h1>
+        <h2 class="text-xl font-bold mb-2">{{quiz_name}}</h2>
+        <h3 class="text-lg mb-4">{{quiz_description}}</h3>
+        <h4 class="text-md font-bold mb-2">Here is what you said you needed...</h4>
+        {% for value in quiz_response.values %}
+            <p class="mb-2">{{ value }}</p>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
 
