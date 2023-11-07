@@ -4,6 +4,24 @@ import requests
 from bs4 import BeautifulSoup
 
 
+class Product(models.Model):
+    name = models.CharField()
+    price = models.FloatField()
+    product_code = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField()
+    additional_info = models.JSONField(blank=True, null=True)
+    image = models.ImageField(upload_to='products', blank=True, null=True)
+    image_urls = models.JSONField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return self.name
+    
+    
 class CurrysScraper:
     def __init__(self):
         self.base_url = 'https://www.currys.co.uk'
@@ -42,6 +60,6 @@ class CurrysScraper:
         print(product)
 
 
-if __name__ == "__main__":
-    scraper = CurrysScraper()
-    scraper.get_product_details('359445')
+# if __name__ == "__main__":
+#     scraper = CurrysScraper()
+#     scraper.get_product_details('359445')
