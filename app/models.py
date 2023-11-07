@@ -27,6 +27,9 @@ class Question(models.Model):
 
     def __str__(self):
         return self.question
+    
+    def get_question_by_name(self, question):
+        return self.objects.get(question=question)
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
@@ -49,3 +52,16 @@ class QuizResponse(models.Model):
 
     def __str__(self):
         return f'{self.quiz.name} - {self.user.username}'
+    
+    def get_quiz_response(quiz_id: int) -> 'QuizResponse':
+        return QuizResponse.objects.get(quiz=quiz_id)
+    
+    def get_quiz_response_by_user(user_id: int) -> 'QuizResponse':
+        return QuizResponse.objects.get(user=user_id)
+    
+    def get_latest_response(self) -> 'QuizResponse':
+        return self.objects.latest(field_name=self.created_at)
+
+
+
+
