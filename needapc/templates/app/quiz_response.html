@@ -2,12 +2,17 @@
 {% block content %}
 <div class="flex justify-center items-center h-screen">
     <div class="card p-8">
-        <h1 class="text-3xl font-bold mb-4">Quiz Results 2</h1>
-        <h2 class="text-xl font-bold mb-2">{{quiz_name}}</h2>
+        <a href="{% url 'index' %}" class="text-4xl font-bold bg-blue-500 hover:bg-blue-700 text-white py-5 pb-6 px-8 rounded-full">
+            <button>Back To Quiz</button>
+        </a>
+        <h1 class="text-3xl font-bold mb-4">Here's what you said for {{quiz_name}}</h1>
         <h3 class="text-lg mb-4">{{quiz_description}}</h3>
-        <h4 class="text-md font-bold mb-2">Here is what you said you needed...</h4>
-        {% for value in quiz_response.values %}
-            <p class="mb-2">{{ value }}</p>
+        <h4 class="text-md font-bold mb-2">Your response to each question can be found below</h4>
+        {% for key, value in quiz_response.items %}
+        <div class="mb-4">
+            <p class="mb-2">{{ key }} :</p>
+            <p class="ml-4">{{ value }}</p>
+        </div>
         {% endfor %}
     </div>
 </div>

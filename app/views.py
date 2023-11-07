@@ -6,19 +6,14 @@ from django.views import View
 from django.views.generic import DetailView
 from app.models import Choice, Question, Quiz, QuizResponse
 from app.forms import QuizForm
-
-# import anonymous user from django
 from django.contrib.auth.models import User
 
 
-# create class index view
 class IndexView(View):
     def get(self, request):
         return render(request, 'app/index.html')
+    
 
-
-#create a form view that will show a form that will allow a user to answer questions from the quix based on the choices
-# open detail view based on slug url
 class QuizView(DetailView):
     model = Quiz
     template_name = 'app/quiz_form.html'
@@ -55,12 +50,9 @@ class QuizView(DetailView):
             user=quiz_response_user,
             response=quiz_response_data
         )
-        # after post redirect to quiz response
         url = reverse('quiz_response', kwargs={'quiz_response_id': quiz_response_object.id})
         return redirect(url)
-        # return render(request, 'app/quiz_response.html', context)
     
-#create class view to present the quiz response
 class QuizResponseView(DetailView):
     model = QuizResponse
     template_name = 'app/quiz_response.html'
@@ -69,18 +61,13 @@ class QuizResponseView(DetailView):
     def get_object(self):
         quiz_response_id = self.kwargs.get('quiz_response_id')
         return QuizResponse.objects.get(id=quiz_response_id)
-        # quiz_slug = self.kwargs.get('quiz_slug')
-        # user_id = self.kwargs.get('user_id')
-        # return QuizResponse.objects.get(quiz__slug=quiz_slug, user__id=user_id)
-    
     
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         quiz_response = self.get_object().response
-        quiz_response.pop('csrfmiddlewaretoken', None) # remove csrfmiddlewaretoken key
+        quiz_response.pop('csrfmiddlewaretoken', None) 
         context['quiz_name'] = self.get_object().quiz.name
         context['quiz_description'] = self.get_object().quiz.description
         context['quiz_response'] = quiz_response
-        print(quiz_response)
         return context
