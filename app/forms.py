@@ -8,5 +8,5 @@ class QuizForm(forms.Form):
         for question in questions:
             self.fields[question.question] = forms.ChoiceField(
                 choices=[(choice.choice, choice.choice) for choice in question.choice_set.all()], 
-                widget=forms.RadioSelect(attrs={'class': 'text-3xl'})
+                widget=forms.RadioSelect(attrs={'class': 'text-2xl'})
             )

@@ -25,7 +25,6 @@ class QuizView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = QuizForm(questions=Question.objects.filter(quiz=self.object))
-        context['questions'] = Question.objects.filter(quiz=self.object)
         context['choices'] = Choice.objects.filter(question__quiz=self.object)
         return context
     
