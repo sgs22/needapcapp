@@ -28,6 +28,8 @@ class TestLaptopsDirectScraper(TestCase):
         products = self.scraper.query_laptop_segment()
         self.assertEquals(len(products) > 0, True)
 
-    # def test_product_data(self):
-    #     process = self.scraper.process()
-    #     self.assertEquals(process, True)
+    def test_product_data(self):
+        # check can get session (valid connection)
+        # get all products and urls return [0]
+        # for the porduct test getting all details from product url
+        # save that data as a new product

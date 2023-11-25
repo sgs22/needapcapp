@@ -22,6 +22,10 @@ class Product(models.Model):
         return self.name
 
     @classmethod
+    def new(cls, *args, **kwargs):
+        return cls.objects.create(*args, **kwargs)
+
+    @classmethod
     def create_from_product_data(cls, product_data: dict):
         if not cls.valid_product_data(product_data):
             return None
@@ -221,9 +225,9 @@ class LaptopsDirectScraper(ProductScraper):
         products = self.query_laptop_segment()
         if products:
             for product in products:
-                product_url = product.get('product_url')
-                if product_url:
-                    product_data = self.get_product_details(product_url)
+                if product.get('product_url'):
+                    product_data = self.get_product_details(
+                        product.get('product_url'))
                     if product_data:
                         success = self.create_product(product_data)
                         print('successfully created') if success else print(
