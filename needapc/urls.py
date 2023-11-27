@@ -17,14 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from app import views
-from scraper import views as scraper_views
 
 
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path(('quiz/<slug:slug>/'), views.QuizView.as_view(), name='quiz'),
-    path('quiz-response/<int:quiz_response_id>/', views.QuizResponseView.as_view(), name='quiz_response'),
-    path('test-laptopsdirect/', scraper_views.test_scraper_view, name='test_laptopsdirect'),
+    path('quiz-response/<int:quiz_response_id>/',
+         views.QuizResponseView.as_view(), name='quiz_response'),
     path('admin/', admin.site.urls),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
