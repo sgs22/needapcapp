@@ -37,30 +37,14 @@ class LaptopsDirectScraper(ProductScraper):
             image_urls = image_urls['href']  # type: ignore
             image_urls = f'{self.base_url}{image_urls}'  # type: ignore
         description = soup.find('div', class_='ProductDescription')
-        additional_info = soup.find('div', id='specs')
-        if additional_info:
-            # get tbody
-            additional_info_data = []
-            table_body = additional_info.find('tbody')
-            # for each tr get td[0] and td[1]
-            # create list with all tr elements from table_body and split each element in a list
-            # type: ignore
-            table_row = [tr.find_all('td') for tr in table_body.find_all('tr')]
-            # for each tr get td[0] and td[1] and make t[0] the key and td[1] the value
-            for data in table_row:
-                key = data[0].text.strip()
-                print('key', key)
-                value = data[1].text.strip()
-                print('value', value)
-                additional_info_data.append({key: value})
-        else:
-            additional_info_data = []
+        specs = soup.find('div', id='specs')
+        additional_info = self.format_specification(specs)
         product_data = {
             'name': name,
             'price': price,
             'product_code': product_code,
             'description': description,
-            'additional_info': {'info': additional_info_data},
+            'additional_info': additional_info,
             'image_urls': [image_urls]
         }
         return product_data
@@ -108,3 +92,14 @@ class LaptopsDirectScraper(ProductScraper):
                 if product_data:
                     product_schemas.append(product_data)
         return product_schemas
+
+    @staticmethod
+    def format_specification(specification) -> list:
+        additional_info_data = []
+        table_body = specification.find('tbody')
+        table_row = [tr.find_all('td') for tr in table_body.find_all('tr')]
+        for data in table_row:
+            key = data[0].text.strip()
+            value = data[1].text.strip() if len(data) > 1 else ''
+            additional_info_data.append({key: value})
+        return additional_info_data
