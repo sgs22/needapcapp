@@ -23,12 +23,13 @@ class Product(models.Model):
 
     @classmethod
     def create_from_product_data(cls, product_data: dict):
-        if not cls.valid_product_data(product_data):
+        if not cls.valid_product_data(product_data):  # type: ignore
             return None
         create_product = cls.objects.create(
-            name=product_data.get('name'), price=product_data.get('price', 0),
+            name=product_data.get('name'),
+            price=product_data.get('price', 0),
             product_code=product_data.get('product_code', ''),
-            description=product_data.get('description', ''),
+            # description=product_data.get('description', ''),
             additional_info=product_data.get('additional_info', {}),
             image_urls=product_data.get('image_urls', {})
         )
@@ -40,9 +41,10 @@ class Product(models.Model):
     def valid_product_data(cls, product_data: dict) -> bool:
         valid = True
         required_fields = ['name', 'price']
-        for k, v in product_data:
-            if not k in required_fields:
+        for key in required_fields:
+            if key not in product_data.keys():
                 valid = False
+                break
         return valid
 
     @classmethod
