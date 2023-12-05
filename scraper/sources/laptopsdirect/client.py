@@ -32,6 +32,7 @@ class LaptopsDirectScraper(ProductScraper):
             price = price_img['alt'].replace('£', '')  # type: ignore
         product_code = soup.find(
             'span', class_='sku text-grey margin-right-15').text  # type: ignore
+        product_code = product_code.replace('SKU: ', '')
         image_urls = soup.find('a', class_='fancyboxThumb')
         if image_urls:
             image_urls = image_urls['href']  # type: ignore
@@ -45,7 +46,9 @@ class LaptopsDirectScraper(ProductScraper):
             'product_code': product_code,
             'description': description,
             'additional_info': additional_info,
-            'image_urls': [image_urls]
+            'image_urls': [image_urls],
+            'retailer': 'Laptops Direct',
+            'retailer_sku_id': f'LD-{product_code[:22]}',
         }
         return product_data
 
@@ -64,6 +67,7 @@ class LaptopsDirectScraper(ProductScraper):
     def create_product(self, product_data: dict):
         create_product = Product.create_from_product_data(product_data)
         if create_product:
+            print(create_product.retailer_sku_id)
             return True
         return False
 
@@ -84,8 +88,6 @@ class LaptopsDirectScraper(ProductScraper):
         product_schemas = []
         products = self.query_product_page(1)
         for product in products:
-            print(
-                f'checking product {product.get("product_name")} with url {product.get("product_url")}')
             url = product.get('product_url')
             if url:
                 product_data = self.get_product_details(url)

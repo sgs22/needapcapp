@@ -10,6 +10,9 @@ class Product(models.Model):
     image_urls = models.JSONField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    retailer = models.CharField(max_length=255, blank=True, null=True)
+    retailer_sku_id = models.CharField(
+        max_length=25, unique=True, blank=True, null=True)
 
     class Meta:
         ordering = ['created_at']
@@ -31,7 +34,9 @@ class Product(models.Model):
             product_code=product_data.get('product_code', ''),
             # description=product_data.get('description', ''),
             additional_info=product_data.get('additional_info', {}),
-            image_urls=product_data.get('image_urls', {})
+            image_urls=product_data.get('image_urls', {}),
+            retailer=product_data.get('retailer', ''),
+            retailer_sku_id=product_data.get('retailer_sku_id', '')
         )
         if create_product:
             return create_product
